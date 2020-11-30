@@ -12,5 +12,9 @@
   "checkout": {
     "pageTitle": "Check-out",
     "totalPriceTitle": "Prix Total"
+  },
+  "products": {
+    "name": "Name",
+    "price": "Price"
   }
 }
