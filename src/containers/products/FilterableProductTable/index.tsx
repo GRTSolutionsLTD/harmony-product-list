@@ -29,7 +29,6 @@ class FilterableProductTable extends React.Component<Props, State> {
 
 		this.handleProductSelected = this.handleProductSelected.bind(this);
 		this.handleFilterTextChange = this.handleFilterTextChange.bind(this);
-		this.handleProductSelected = this.handleProductSelected.bind(this);
 	}
 
 	handleProductSelected(selectedProduct: Product) {
