@@ -7,7 +7,9 @@ interface Props {
 const ProductCategoryRow: React.FC<Props> = (props: Props) => {
 	const { category } = props;
 	return (
-		<th colSpan={3}>{category}</th>
+		<tr>
+			<th colSpan={3}>{category}</th>
+		</tr>
 	);
 };
 

@@ -7,8 +7,6 @@ import { Product } from 'actions/redux/product/interfaces';
 import { sortBy } from 'lodash';
 import { Container } from 'react-bootstrap';
 import { TranslateFunction } from 'react-localize-redux';
-
-
 // import ProductsActions, { productsSelector } from 'actions/redux/products';
 
 interface Props {

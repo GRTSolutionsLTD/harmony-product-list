@@ -7,27 +7,62 @@ import { Product } from 'actions/redux/product/interfaces';
 import { TranslateFunction } from 'react-localize-redux';
 import ProductTable from '../ProductTable';
 import ProductView from '../ProductView';
-// import FilterableProductTableActions, { filterableProductTableSelector } from 'actions/redux/filterableProductTable';
 
 interface Props {
 	products: Product[];
 	translate: TranslateFunction;
 }
 
-class FilterableProductTable extends React.Component<Props> {
+interface State {
+	filterText: string;
+	selectedProduct: Product | null;
+}
+
+class FilterableProductTable extends React.Component<Props, State> {
+	constructor(props: Props) {
+		super(props);
+
+		this.state = {
+			filterText: '',
+			selectedProduct: null
+		};
+
+		this.handleProductSelected = this.handleProductSelected.bind(this);
+		this.handleFilterTextChange = this.handleFilterTextChange.bind(this);
+		this.handleProductSelected = this.handleProductSelected.bind(this);
+	}
+
+	handleProductSelected(selectedProduct: Product) {
+		this.setState({ selectedProduct });
+	}
+
+	handleFilterTextChange(filterText: string) {
+		this.setState({ filterText });
+	}
+
 	render() {
+		const { filterText, selectedProduct } = this.state;
 		const { products, translate } = this.props;
 		return (
 			<Container>
 				<Row>
-					<ProductSearchBar />
+					<ProductSearchBar
+						filterText={filterText}
+						onFilterTextChange={this.handleFilterTextChange}
+					/>
 				</Row>
 				<Row>
 					<Col lg={8}>
-						<ProductTable products={products} translate={translate} />
+						<ProductTable
+							products={products}
+							translate={translate}
+							filterText={filterText}
+							selectedProductId={selectedProduct ? selectedProduct.id : ''}
+							onProductSelected={this.handleProductSelected}
+						/>
 					</Col>
 					<Col>
-						<ProductView product={products[0]} />
+						{selectedProduct != null && <ProductView product={selectedProduct} />}
 					</Col>
 				</Row>
 			</Container>
@@ -43,4 +78,4 @@ export default baseConnect(FilterableProductTable,
 	},
 	{
 
-	});
+	}) as React.ComponentType<any>;
