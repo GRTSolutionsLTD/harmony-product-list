@@ -15,6 +15,7 @@ interface Props {
 
 interface State {
 	filterText: string;
+	isInStock: boolean;
 	selectedProduct: Product | null;
 }
 
@@ -24,11 +25,13 @@ class FilterableProductTable extends React.Component<Props, State> {
 
 		this.state = {
 			filterText: '',
+			isInStock: true,
 			selectedProduct: null
 		};
 
 		this.handleProductSelected = this.handleProductSelected.bind(this);
 		this.handleFilterTextChange = this.handleFilterTextChange.bind(this);
+		this.handleIsInStockChange = this.handleIsInStockChange.bind(this);
 	}
 
 	handleProductSelected(selectedProduct: Product) {
@@ -39,8 +42,12 @@ class FilterableProductTable extends React.Component<Props, State> {
 		this.setState({ filterText });
 	}
 
+	handleIsInStockChange(isInStock: boolean) {
+		this.setState({ isInStock });
+	}
+
 	render() {
-		const { filterText, selectedProduct } = this.state;
+		const { filterText, isInStock, selectedProduct } = this.state;
 		const { products, translate } = this.props;
 		return (
 			<Container>
@@ -48,6 +55,8 @@ class FilterableProductTable extends React.Component<Props, State> {
 					<ProductSearchBar
 						filterText={filterText}
 						onFilterTextChange={this.handleFilterTextChange}
+						isInStock={isInStock}
+						onIsInStockChange={this.handleIsInStockChange}
 					/>
 				</Row>
 				<Row>
@@ -56,6 +65,7 @@ class FilterableProductTable extends React.Component<Props, State> {
 							products={products}
 							translate={translate}
 							filterText={filterText}
+							isInStock={isInStock}
 							selectedProductId={selectedProduct ? selectedProduct.id : ''}
 							onProductSelected={this.handleProductSelected}
 						/>

@@ -10,13 +10,14 @@ interface Props {
 	products: Product[];
 	translate: TranslateFunction;
 	filterText: string;
+	isInStock: boolean;
 	onProductSelected: (product: Product) => void;
 	selectedProductId: string;
 }
 
 const ProductTable: React.FC<Props> = (props: Props) => {
 	const {
-		products, onProductSelected, filterText, selectedProductId, translate
+		products, onProductSelected, filterText, isInStock, selectedProductId, translate
 	} = props;
 
 	function renderRows(): JSX.Element[] {
@@ -24,6 +25,8 @@ const ProductTable: React.FC<Props> = (props: Props) => {
 		const rows: JSX.Element[] = [];
 		products.forEach((product: Product) => {
 			if (!isProductContainsText(product, filterText)) return;
+			if (isInStock && !product.isInStock) return;
+
 			if (prevCategory !== product.category) {
 				prevCategory = product.category;
 				rows.push(<ProductCategoryRow key={product.category} category={product.category} />);
@@ -33,7 +36,7 @@ const ProductTable: React.FC<Props> = (props: Props) => {
 
 		return rows;
 	}
-	
+
 	function isProductContainsText(product: Product, search: string) {
 		if (isEmpty(search)) return true;
 		if (includes(product.name, search)) return true;
