@@ -2,26 +2,33 @@ import * as React from 'react';
 import { baseConnect } from '@base/features/base-redux-react-connect';
 import { ApplicationState } from 'actions/redux';
 import FilterableProductTable from 'containers/products/FilterableProductTable';
-import data from 'actions/redux/product/products.json';
 import { Product } from 'actions/redux/product/interfaces';
-import { sortBy } from 'lodash';
 import { Container } from 'react-bootstrap';
 import { TranslateFunction } from 'react-localize-redux';
-// import ProductsActions, { productsSelector } from 'actions/redux/products';
+import ProductActions, { productSelector } from 'actions/redux/product';
+import { Dispatch } from 'redux';
 
 interface Props {
 	translate: TranslateFunction;
+	products: Product[];
+	getProductsList: () => void;
 }
 
 class Products extends React.Component<Props> {
-	products: Product[] = sortBy(data, ['category']);
-	
+	componentDidMount() {
+		const { getProductsList, products } = this.props;
+		if (products.length === 0) {
+			getProductsList();
+		}
+	}
+
 	render() {
+		const { products } = this.props;
 		const { translate } = this.props;
 		return (
 			<Container>
 				<h1>product list</h1>
-				<FilterableProductTable products={this.products} translate={translate} />
+				<FilterableProductTable products={products} translate={translate} />
 			</Container>
 		);
 	}
@@ -30,9 +37,11 @@ class Products extends React.Component<Props> {
 export default baseConnect(Products,
 	(state: ApplicationState) => {
 		return {
-
+			products: productSelector.getProductsList(state)
 		};
 	},
-	{
-
+	(dispatch: Dispatch) => {
+		return {
+			getProductsList: () => dispatch(ProductActions.getProducts())
+		};
 	});
