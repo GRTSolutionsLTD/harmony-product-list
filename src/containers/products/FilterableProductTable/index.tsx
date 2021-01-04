@@ -1,21 +1,26 @@
 import * as React from 'react';
 import { baseConnect } from '@base/features/base-redux-react-connect';
-import { ApplicationState } from 'actions/redux';
 import { Col, Container, Row } from 'react-bootstrap';
-import ProductSearchBar from '../ProductSearchBar';
-import { Product } from 'actions/redux/product/interfaces';
 import { TranslateFunction } from 'react-localize-redux';
+import { Dispatch } from 'redux';
+
+import { Product, ProductFilter } from 'actions/redux/product/interfaces';
+import { ApplicationState } from 'actions/redux';
+import ProductActions, { productSelector } from 'actions/redux/product';
+
 import ProductTable from '../ProductTable';
 import ProductView from '../ProductView';
+import ProductSearchBar from '../ProductSearchBar';
 
 interface Props {
 	products: Product[];
+	getProductsList: () => void;
+	filter: ProductFilter;
+	setFilter: (filter: ProductFilter) => void;
 	translate: TranslateFunction;
 }
 
 interface State {
-	filterText: string;
-	isInStock: boolean;
 	selectedProduct: Product | null;
 }
 
@@ -24,8 +29,6 @@ class FilterableProductTable extends React.Component<Props, State> {
 		super(props);
 
 		this.state = {
-			filterText: '',
-			isInStock: true,
 			selectedProduct: null
 		};
 
@@ -34,21 +37,30 @@ class FilterableProductTable extends React.Component<Props, State> {
 		this.handleIsInStockChange = this.handleIsInStockChange.bind(this);
 	}
 
+	componentDidMount() {
+		const { getProductsList, products } = this.props;
+		if (products.length === 0) {
+			getProductsList();
+		}
+	}
+
 	handleProductSelected(selectedProduct: Product) {
 		this.setState({ selectedProduct });
 	}
 
 	handleFilterTextChange(filterText: string) {
-		this.setState({ filterText });
+		const { setFilter, filter } = this.props;
+		setFilter({ ...filter, filterText });
 	}
 
 	handleIsInStockChange(isInStock: boolean) {
-		this.setState({ isInStock });
+		const { setFilter, filter } = this.props;
+		setFilter({ ...filter, isInStock });
 	}
 
 	render() {
-		const { filterText, isInStock, selectedProduct } = this.state;
-		const { products, translate } = this.props;
+		const { selectedProduct } = this.state;
+		const { filter: { filterText, isInStock }, products, translate } = this.props;
 		return (
 			<Container>
 				<Row>
@@ -82,9 +94,14 @@ class FilterableProductTable extends React.Component<Props, State> {
 export default baseConnect(FilterableProductTable,
 	(state: ApplicationState) => {
 		return {
-
+			products: productSelector.getProductsList(state),
+			filter: productSelector.getFilter(state)
 		};
 	},
-	{
+	(dispatch: Dispatch) => {
+		return {
+			getProductsList: () => dispatch(ProductActions.getProducts()),
+			setFilter: (filter: ProductFilter) => dispatch(ProductActions.setFilter(filter))
+		};
+	});
 
-	}) as React.ComponentType<any>;
