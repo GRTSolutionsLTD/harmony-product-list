@@ -14,7 +14,15 @@
     "totalPriceTitle": "Prix Total"
   },
   "products": {
+    "id": "Id",
     "name": "Name",
-    "price": "Price"
+    "price": "Price",
+    "category": "Category",
+    "isInStock": "In Stock",
+    "picture": "Picture",
+    "description": "Description",
+    "registered": "Date",
+    "createProduct": "Create Product",
+    "updateProduct": "Update Product"
   }
 }

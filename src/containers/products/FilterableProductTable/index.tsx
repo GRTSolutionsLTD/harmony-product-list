@@ -76,14 +76,12 @@ class FilterableProductTable extends React.Component<Props, State> {
 						<ProductTable
 							products={products}
 							translate={translate}
-							filterText={filterText}
-							isInStock={isInStock}
 							selectedProductId={selectedProduct ? selectedProduct.id : ''}
 							onProductSelected={this.handleProductSelected}
 						/>
 					</Col>
 					<Col>
-						{selectedProduct != null && <ProductView product={selectedProduct} />}
+						{selectedProduct != null && <ProductView translate={translate} product={selectedProduct} />}
 					</Col>
 				</Row>
 			</Container>

@@ -14,7 +14,15 @@
     "totalPriceTitle": "Prix Total"
   },
   "products": {
+    "id": "מזהה",
     "name": "שם",
-    "price": "משפחה"
+    "price": "מחיר",
+    "category": "קטגוריה",
+    "isInStock": "במלאי",
+    "picture": "תמונה",
+    "description": "תאור",
+    "registered": "תאריך",
+    "createProduct": "יצירת פריט",
+    "updateProduct": "עדכון פריט"
   }
 }
